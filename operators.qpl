@@ -1,0 +1,41 @@
+proc empty: {
+     print "Me doeth nothing";
+} in skip;
+
+proc dumpRegisters: a: qbit, b:qbit -> a:qbit, b:qbit {
+     print "Dumping contents of two quantum bits:";
+     dump a,b;
+} in {
+  new qbit eins := 1;
+  new qbit zwei := 1;
+  new qbit drei := 0;
+  
+  dump eins, zwei;
+  dump drei, zwei;   /* Meins */
+};
+
+proc operatorTest: {  /* This tests empty contexts as well */
+     new qbit test1 := 0;
+     new qbit test2 := 1;
+     call dumpRegisters(test1, test2);
+
+     print "Applying CNot";
+     test1, test2 *= CNot;
+     call dumpRegisters(test1, test2);     
+
+     print "The first qbit is now:"; dump test1;
+
+     print "Applying Not on the second qbit";
+     test2 *= Not;
+     dump test2;
+
+     print "Applying Hadamard on the first qbit";
+     test1 *= H;
+     call dumpRegisters(test1, test2);     
+
+     print "Shifting the phase of the second qbit";
+     test2 *= Phase 0.5;
+     call dumpRegisters(test1, test2);
+} in call operatorTest(); 
+
+ 

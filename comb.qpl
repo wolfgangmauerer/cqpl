@@ -1,0 +1,9 @@
+proc dumpRegisters: a: qbit -> a:qbit {
+     print "Dumping contents of two quantum bits:";
+     new qbit b := 1;
+     dump a,b;
+} in {
+  new qbit a:= 0;
+  call dumpRegisters(a);
+};
+

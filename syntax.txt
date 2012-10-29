@@ -1,0 +1,54 @@
+Syntax rules for QPL given in EBNF
+
+main:= statement_list
+
+statement := ifthen 
+           | measure 
+           | while_loop
+	   | proc_decl
+           | proc_call
+	   | allocation 
+	   | skip 
+           | gate_application
+           | block
+
+proc_call  := "call" name "(" var_list ")"
+proc_decl  := "proc" name ":" context "->" context block "in" statement
+ifthen     := "if" boolean_expr "then" statement "else" statement
+measure    := "measure" var "then" statement "else" statement
+while_loop := "while" boolean_expr "do" statement
+skip       := "skip"
+block      := "{" stmt_list "}"
+
+context := var ":" type { "," var ":" type }
+
+arith_expr := number 
+            | var
+            | arith_expr * arith_expr 
+            | arith_expr + arith_expr 
+            | arith_expr - arith_expr
+            | arith_expr / arith_expr
+            | (arith_expr)
+boolean_expr := arith_expr { cmp_op arith_expr }
+              | !boolean_expr
+              | boolean_expr boolean_op boolean_expr
+              | "true" 
+              | "false"
+cmp_op := "<" | ">" | "<=" | ">=" | "!=" 
+boolean_op := "&" | "|"
+
+proc_call := "call" name "(" var_list ")"
+
+gate_application := var_list "*=" var
+
+var_list := var { "," var }
+
+stmt_list := statement 
+           | statement ";" stmt_list
+
+allocation :=  "new bit" var ":=" inital_value
+             | "new qbit" var ":=" inital_value
+inital_value := "0" | "1"
+
+type := "bit" | "qbit"
+var := 'Alphanumerical name'

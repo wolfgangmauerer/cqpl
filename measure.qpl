@@ -1,0 +1,9 @@
+proc empty: {
+  skip;
+} in {
+  new qint test := 17;
+  new int res := 0;
+  res := measure test;
+  print "Result:";
+  print res;
+};

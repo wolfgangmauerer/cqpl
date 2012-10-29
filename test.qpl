@@ -1,0 +1,61 @@
+/* Test program for QPL */
+proc X: a:bit, p:qbit, blubber:qbit -> a:bit, p:qbit, blubber:qbit {
+     new qbit h := 1;
+     h *= H;  
+     measure h then { print "h is |1>"; } else { print "h is |0>"; };
+     measure p
+       then skip
+       else {
+           new qbit r := 0;
+	   new qbit sepp := 1;
+           r,sepp *= CNot;
+           r,sepp *= CNot;
+	   new qint i := 17; 
+/*           blubber,r *= H; 
+           r,blubber *= CNot; 
+           r,blubber *= CNot; 
+	   dump r,blubber; */ /* Dump the quantum value. Obviously not supported
+                              on a real quantum computer */ 
+           r *= H;
+	   blubber *= H;
+       }; 
+       new bit xyz := 0;
+       
+} in {
+new qbit peng := 0;
+new qbit d := 1;
+new qint tobi := 5+7*3;
+print "Der Wert von Tobi ist: ";
+dump tobi;
+new qint blubb := 0;
+};
+
+proc longProc: sepp:qbit {  /* Note that we use only one context spec here */
+     if (5+7 > 3) then {
+        print "Hallo";
+	print 1.0+2+3; /* Let's check the printing of arithmetic expressions */
+     }
+     else skip;
+}
+in 
+{
+    new qbit p := 0;
+    new qbit g := 0;
+    new qbit sepp := 1;
+    new bit peng := 1;
+    new int holla_hup := 0;
+    dump sepp, g;
+    (holla_hup) := call X(peng, p, g); 
+    dump g;
+    sepp,g *= [[0.5,  0.5,   0.5,  0.5,
+                0.5,  0.5i, -0.5, -0.5i,
+                0.5, -0.5,   0.5, -0.5,
+                0.5, -0.5i, -0.5,  0.5i]]; /* User-defined gate */ 
+    dump sepp,g;
+
+    print "Zur Abwechslung rufen wir longProc auf";
+    call longProc(sepp);
+
+    print "finished!";
+};
+

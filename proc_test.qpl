@@ -1,0 +1,35 @@
+/* Test program for the procedure call mechanism */
+
+proc test: aint:int, bbit: bit, cfloat:float, dqbit:qbit {
+  print "Hallo, hier kommen die Werte:"; 
+  print "aint: ";   print aint;
+  print "bbit: ";   print bbit;
+  print "cfloat: "; print cfloat;
+  cfloat := 20.3;
+  new int loop := 10;
+  loop := loop - 1;
+  while (loop > 5) do {
+    print "In while. value of loop:";
+    print loop;
+    loop := loop - 1;
+  }; 
+} in
+{
+  new int a0 := 10;
+  new bit a1 := 0;
+  new float a2 := 0.1;
+  new qbit b1 := 1;
+  
+  new int eins := 0;
+  new bit zwei := 1;
+  new float drei := 1.0;
+
+  print "Vor dem Aufruf";
+  print "Wert von a2: "; print a2;
+  (eins, zwei, drei) := call test(a0, a1, a2, b1);
+  print "Ist nach dem Aufruf...";
+  print "Wert von drei (urspruenglich a2):"; print drei;
+  print "Wert von a2 weiterhin:"; print a2;
+  call test(a0, a1, a2, b1);
+}; 
+

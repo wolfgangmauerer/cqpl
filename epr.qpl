@@ -1,0 +1,24 @@
+module Bob {
+   print "Before receiving the qbit";
+   receive q:qbit from Alice;
+   print "Got the qbit from Alice";
+   measure q then { print "Bob's qbit is |1>"; } 
+             else { print "Bob's qbit is |0>"; };
+};
+
+module Alice {
+  proc createEPR: a:qbit, b:qbit {
+       b *= Not;
+       b *= H;
+       a,b *= CNot;
+  } in {
+    new qbit eins := 0;
+    new qbit zwei := 0;
+    call createEPR(eins, zwei);
+    print "Now sending the qbit to Bob";
+    send eins to Bob;
+    measure zwei then { print "Alice's qbit is |1>"; } 
+                 else { print "Alice's qbit is |0>"; };
+  };
+};
+

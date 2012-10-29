@@ -1,0 +1,9 @@
+proc fourier: a:qbit, b:qbit {
+     a,b *= FT(1);
+} in {
+  new qbit eins := 0;
+  new qbit zwei := 0;
+  call fourier(eins, zwei);
+  print "State after FT:";
+  dump eins, zwei;
+};

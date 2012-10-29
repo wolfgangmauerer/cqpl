@@ -1,0 +1,33 @@
+module Alice {
+  proc fourier: a:qbit, b:qbit {
+       a,b *= FT(2);
+  } in {
+    new qbit eins := 0;
+    new qbit zwei := 0;
+    call fourier(eins, zwei);
+    print "State after FT:";
+    dump eins, zwei;
+    send eins to Bob;
+    new int test := 0;
+    test := measure zwei;
+  };
+};
+
+module Bob {
+  print "Hallo";
+/*  new qint x := 5;
+  new int res := 0;
+  res := measure x;*/
+  receive test:qbit from Alice;
+  print "I am Bob";
+  new qbit a := 0;
+  new qbit b := 0;
+  print "State before FT:"; dump a, b;
+  a, b *= FT(2);
+  print "State after FT:";  dump a, b;
+  dump a; dump b;
+  measure a then { print "a is |1>"; } else { print "a is |0>"; };
+  print "State of b: "; dump b;
+  print "State of a: "; dump a;
+  print "State of (a,b): "; dump a,b;
+};

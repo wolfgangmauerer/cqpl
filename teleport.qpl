@@ -1,0 +1,46 @@
+module Alice {
+   proc createEPR: a:qbit, b:qbit {
+      a *= H;
+      b,a *= CNot;  /* b: Control, a: Target */
+   } in {
+     new qbit teleport := 0;  /* Apply unitary operations to set the qbit 
+                                 to any other desired state */     
+     new qbit epr1 := 0;
+     new qbit epr2 := 0; 
+  
+     call createEPR(epr1, epr2); 
+     send epr2 to Bob;        
+
+     teleport, epr1 *= CNot;  /* teleport: Control, epr1: Target */
+
+     new bit m1 := 0;
+     new bit m2 := 0;
+     m1 := measure teleport;
+     m2 := measure epr1;
+     print "m1: "; 
+     print m1;
+     print "m2: ";
+     print m2;
+     /* Transmit the classical measurement results to Bob */
+     send m1, m2 to Bob; 
+   };
+};
+
+module Bob {
+   receive q:qbit from Alice;
+   receive m1:bit, m2:bit from Alice;
+
+   if (m1 = 1) then {
+      print "Applying sigma_x";
+      q *= [[ 0,1,1,0 ]];  /* Apply sigma_x */
+   };
+
+   if (m2 = 1) then {
+      print "Applying sigma_z";
+      q *= [[ 1,0,0,-1 ]];  /* Apply sigma_z */
+   };
+
+   /* The state is now teleported */
+   print "Teleported state:";
+   dump q;
+};

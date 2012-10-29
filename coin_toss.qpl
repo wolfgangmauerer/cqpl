@@ -1,0 +1,3 @@
+new qbit q := 0;
+q *= H;
+measure q then { print "Tossed head"; } else { print "Tossed tail"; };
