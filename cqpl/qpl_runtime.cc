@@ -19,6 +19,7 @@
 
 #include<stdarg.h>
 #include<sys/time.h>
+#include<stdio.h>
 #include "qpl_runtime.h"
 #pragma implementation
 
@@ -69,7 +70,7 @@ opVar opFFT(int n) {
 }
 
 // Construct an operator that performs NOT operations on appropriate
-// qubits in order to assign a value to a quantum variable. The 
+// qubits in order to assign a value to a quantum variable. The
 // resulting operator needs to be applied to a reset quantum state,
 // i.e. one where all constituting qbits are set to zero.
 // number denotes the number we want to set, whereas length specifies
@@ -101,18 +102,18 @@ opMatrix* userOperator(int dimension, complx* elements[]) {
     dim = int_sqrt(dimension); // The matrix is dim x dim
     n = int_log2(dim);  // dim = 2^{n}, where n is the # of qbits of a state
                         // the matrix operator can act on
-    
+
     // Although the compiler should have already checked unitarity
     // of the arguments, we nethertheless do it once more here.
     // (rationale: useful for debugging the runtime)
     // Multiply the matrix with it's conjugate transpose
-    // and check if the result is a unit matrix up to numeric 
+    // and check if the result is a unit matrix up to numeric
     // inaccuracies
     for(i = 0; i < dim; i++) {
 	for(j = 0; j < dim; j++) {
 	    z = 0;
 	    for(k = 0; k < dim; k++) {
-		z += *elements[i*dim + k] * 
+		z += *elements[i*dim + k] *
 		     conj(*elements[j*dim + k]);
 	    }
 
@@ -128,8 +129,8 @@ opMatrix* userOperator(int dimension, complx* elements[]) {
 		exit(-1);
 	    }
 	}
-    } 
-    
+    }
+
     // Everything fine, so construct the desired operator now
     term* t[dim];
     for(i = 0; i < dim; i++) {
@@ -141,9 +142,9 @@ opMatrix* userOperator(int dimension, complx* elements[]) {
 	    t[i][k++] = term(bitvec(n,j),z);
 	}
     }
-    
+
     opMatrix *op = new opMatrix(n, &t[0]);
-    return op; 
+    return op;
 }
 
 
@@ -152,14 +153,14 @@ string regstr(const bitvec& v,int width=0) {
     int i,c,z=0;
     char s[v.length() + 3];
     char *p=s;
-    
+
     for(i = v.length()-1; i >= 0; i--) {
 	z|=v[i];
 	if(width && !z && i >= width) continue;
 	*(p++)=(v[i] ? '1' : '0');
     }
     *(p++)=0;
-    
+
     return string(s);
 }
 
@@ -187,4 +188,4 @@ void dump_quantum_value(quState *qs,ostream *o = &cout) {
 
     delete pm;
     (*f) << endl;
-} 
+}
