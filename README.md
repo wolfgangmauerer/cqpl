@@ -9,8 +9,8 @@ Builds on top of Bernhard Oemer's [QCL](http://tph.tuwien.ac.at/~oemer/qcl.html)
 
 ## Quick Setup
 
-1) Clone repository and `cd` into the directory
-2) Run `sh install.sh`
+1. Clone repository and `cd` into the directory
+2. Run `sh install.sh`
 
 To verify that it is working try the cointoss example with
 ```
